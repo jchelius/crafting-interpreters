@@ -20,10 +20,8 @@ void dll_insert(char *val){
 	new_node->next = NULL;
 	// malloc one extra char for zero termination
 	new_node->val = malloc((MAXLEN+1)*sizeof(char));
-	// should probably convert this to snprintf instead of strncpy
-	strncpy(new_node->val, val, MAXLEN);
+	snprintf(new_node->val, MAXLEN+1, "%s", val);
 	new_node->val[MAXLEN] = 0;
-	// printf("%c\n", new_node->val[MAXLEN]);
 	if (!head){
 		head = new_node;
 	}
@@ -35,14 +33,7 @@ void dll_insert(char *val){
 
 ListNode *dll_find(char *val){
 	ListNode *cur = head;
-	// if (strncmp(val, cur->val, MAXLEN) == 0){
-	// 	return cur;
-	// }
-	// cur = cur->next;
-	// return NULL;
 	while (cur){
-		// printf("dll_find: %s\n", cur->val, MAXLEN);
-		// printf("%s %s\n", val, cur->val);
 		if (strncmp(val, cur->val, MAXLEN) == 0){
 			return cur;
 		}
@@ -53,20 +44,18 @@ ListNode *dll_find(char *val){
 
 void dll_delete(ListNode *node){
 	if (!node->prev){
-		// target = head
 		head = node->next;
 	}
-	printf("-----------------------------------\n");
 	else{
 		node->prev->next = node->next;
 	}
 	if (!node->next){
-		// target = tail
 		tail = node->prev;
 	}
 	else{
 		node->next->prev = node->prev;
 	}
+	free(node->val);
 	free(node);
 	node = NULL;
 }
@@ -99,6 +88,7 @@ int main(void){
 	dll_insert("foo");
 	dll_insert("baz");
 	dll_insert("bar");
+	dll_print();
 	ListNode *foo = dll_find("foo");
 	ListNode *baz = dll_find("baz");
 	ListNode *bar = dll_find("bar");
@@ -110,7 +100,6 @@ int main(void){
 	printf("%s\n", bar->val);
 	dll_delete(foo);
 	printf("-----------------------------------\n");
-	
 	dll_print();
 	dll_delete(head);
 	printf("-----------------------------------\n");
