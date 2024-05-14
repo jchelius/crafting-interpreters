@@ -107,7 +107,7 @@ public class Parser {
         if (match(LEFT_PAREN)){
             Expr expr = expression();
             consume(RIGHT_PAREN, "Expect ')' after expression");
-            return new Expr.Literal(expr);
+            return new Expr.Grouping(expr);
         }
 
         throw error(peek(), "Expect expression.");
